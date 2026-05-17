@@ -19,10 +19,13 @@ function App() {
   ]);
 
   // --- ESTADOS PARA LA TABLA Y EL MODAL ---
-  const [searchTerm, setSearchTerm] = useState(''); // Para la barra de búsqueda
-  const [favorites, setFavorites] = useState([]); // Arreglo para guardar los IDs favoritos
-  const [sortConfig, setSortConfig] = useState({ key: 'eff', direction: 'desc' }); // Para ordenar la tabla
-  const [selectedPlayer, setSelectedPlayer] = useState(null); // Para abrir el modal
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchHistory, setSearchHistory] = useState([]); // Historial de búsqueda
+  const [favorites, setFavorites] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: 'eff', direction: 'desc' });
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1); // Página actual
+  const [itemsPerPage, setItemsPerPage] = useState(5); // Jugadores por página
 
   const toggleTheme = () => {
     setIsLightMode(!isLightMode)
@@ -59,6 +62,38 @@ function App() {
     } else {
       setFavorites([...favorites, playerId]);
     }
+  };
+
+  // --- LÓGICA DE BÚSQUEDA CON HISTORIAL ---
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+    setCurrentPage(1); // Resetear a página 1 al buscar
+    if (value.trim() && !searchHistory.includes(value.trim())) {
+      setSearchHistory(prev => [value.trim(), ...prev].slice(0, 5)); // máximo 5 en historial
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchTerm('');
+    setCurrentPage(1);
+  };
+
+  const clearHistory = () => setSearchHistory([]);
+
+  // --- LÓGICA DE PAGINACIÓN ---
+  const totalPages = Math.max(1, Math.ceil(sortedPlayers.length / itemsPerPage));
+  const paginatedPlayers = sortedPlayers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+  };
+
+  const handleItemsPerPage = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1);
   };
 
   return (
@@ -117,8 +152,14 @@ function App() {
               className="search-input" 
               placeholder="Escribe un nombre o equipo..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearch(e.target.value)}
             />
+            {searchTerm && (
+              <button className="search-clear-btn" onClick={clearSearch}>✖</button>
+            )}
+            {searchTerm && (
+              <button className="search-limpiar-btn" onClick={clearSearch}>Limpiar</button>
+            )}
           </div>
         </section>
 
@@ -169,7 +210,7 @@ function App() {
                 </tr>
               </thead>
               <tbody>
-                {sortedPlayers.map((player) => (
+                {paginatedPlayers.length > 0 ? paginatedPlayers.map((player) => (
                   <tr key={player.id} onClick={() => setSelectedPlayer(player)}>
                     <td>
                       <button 
@@ -191,54 +232,128 @@ function App() {
                     <td>{player.ast}</td>
                     <td>{player.eff}</td>
                   </tr>
-                ))}
+                )) : (
+                  <tr><td colSpan="9" style={{textAlign:'center', padding:'2rem', color:'#6b7280'}}>No se encontraron jugadores</td></tr>
+                )}
               </tbody>
             </table>
           </div>
 
-          {/* --- PAGINACIÓN --- */}
+          {/* --- PAGINACIÓN FUNCIONAL --- */}
           <div className="table-pagination">
             <div className="pagination-left">
               <span>MOSTRAR</span>
-              <select className="pagination-select">
-                <option>5 por página</option>
-                <option>10 por página</option>
+              <select className="pagination-select" value={itemsPerPage} onChange={handleItemsPerPage}>
+                <option value={5}>5 por página</option>
+                <option value={10}>10 por página</option>
+                <option value={15}>15 por página</option>
               </select>
+              <span className="pagination-info">
+                {Math.min((currentPage - 1) * itemsPerPage + 1, sortedPlayers.length)}-{Math.min(currentPage * itemsPerPage, sortedPlayers.length)} de {sortedPlayers.length}
+              </span>
             </div>
             <div className="pagination-right">
-              <button className="page-btn">«</button>
-              <button className="page-btn">‹</button>
-              <button className="page-btn active">1</button>
-              <button className="page-btn">2</button>
-              <button className="page-btn">3</button>
-              <button className="page-btn">4</button>
-              <button className="page-btn">›</button>
-              <button className="page-btn">»</button>
+              <button className="page-btn" onClick={() => goToPage(1)} disabled={currentPage === 1}>«</button>
+              <button className="page-btn" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>‹</button>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                <button 
+                  key={page}
+                  className={`page-btn ${currentPage === page ? 'active' : ''}`}
+                  onClick={() => goToPage(page)}
+                >
+                  {page}
+                </button>
+              ))}
+              <button className="page-btn" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>›</button>
+              <button className="page-btn" onClick={() => goToPage(totalPages)} disabled={currentPage === totalPages}>»</button>
             </div>
           </div>
         </section>
 
-        {/* --- MODAL DE JUGADOR --- */}
+        {/* --- MODAL DE JUGADOR (ESTILO IMAGEN) --- */}
         {selectedPlayer && (
           <div className="modal-overlay" onClick={() => setSelectedPlayer(null)}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <button className="modal-close" onClick={() => setSelectedPlayer(null)}>✖</button>
-              <h2>{selectedPlayer.name}</h2>
-              <p className="modal-team">{selectedPlayer.team} • {selectedPlayer.pos}</p>
+            <div className="modal-content-wide" onClick={(e) => e.stopPropagation()}>
               
-              <div className="modal-stats-grid">
-                <div className="m-stat"><span>PTS</span><strong>{selectedPlayer.pts}</strong></div>
-                <div className="m-stat"><span>REB</span><strong>{selectedPlayer.reb}</strong></div>
-                <div className="m-stat"><span>AST</span><strong>{selectedPlayer.ast}</strong></div>
-                <div className="m-stat"><span>EFF</span><strong className="eff-text">{selectedPlayer.eff}</strong></div>
+              {/* --- Barra Superior (Gris) --- */}
+              <div className="modal-top-bar">
+                <h2>{selectedPlayer.name}</h2>
+                <button className="modal-close-icon" onClick={() => setSelectedPlayer(null)}>✖</button>
               </div>
 
-              <button 
-                className="modal-fav-btn"
-                onClick={() => toggleFavorite(selectedPlayer.id)}
-              >
-                {favorites.includes(selectedPlayer.id) ? 'Quitar de Favoritos ⭐' : 'Añadir a Favoritos ⭐'}
-              </button>
+              {/* --- Cuerpo Principal (Morado) --- */}
+              <div className="modal-body-content">
+                
+                {/* Placa y Botón Favorito */}
+                <div className="modal-badge-row">
+                  <div className="badge-group">
+                    <span className="badge badge--yellow">{selectedPlayer.pos.toUpperCase()}</span>
+                    <span className="player-id-faint">#{selectedPlayer.id}</span>
+                  </div>
+                  <button 
+                    className={`modal-fav-btn-small ${favorites.includes(selectedPlayer.id) ? 'active' : ''}`}
+                    onClick={() => toggleFavorite(selectedPlayer.id)}
+                  >
+                    ★ Favorito
+                  </button>
+                </div>
+
+                {/* Cuadrícula de Información */}
+                <div className="modal-info-grid">
+                  <div className="info-col">
+                    <div className="info-item">
+                      <span className="info-label">EQUIPO</span>
+                      <span className="info-value">{selectedPlayer.team}</span>
+                    </div>
+                    <div className="info-item mt-custom">
+                      <span className="info-label">ALTURA</span>
+                      <span className="info-value">{selectedPlayer.height}</span>
+                    </div>
+                  </div>
+
+                  <div className="info-col">
+                    <div className="info-item">
+                      <span className="info-label">EDAD</span>
+                      <span className="info-value">{selectedPlayer.age} años</span>
+                    </div>
+                    <div className="info-item mt-custom">
+                      <span className="info-label">PESO</span>
+                      <span className="info-value">{selectedPlayer.weight}</span>
+                    </div>
+                  </div>
+
+                  <div className="info-col align-bottom">
+                    <div className="info-item mt-custom">
+                      <span className="info-label">ASISTENCIAS</span>
+                      <span className="info-value">{selectedPlayer.ast}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tarjetas Grandes */}
+                <div className="modal-big-stats">
+                  <div className="big-card bg-yellow">
+                    <span className="big-label">PUNTOS</span>
+                    <span className="big-val">{selectedPlayer.pts}</span>
+                  </div>
+                  <div className="big-card bg-dark">
+                    <span className="big-label">REBOTES</span>
+                    <span className="big-val">{selectedPlayer.reb}</span>
+                  </div>
+                  <div className="big-card bg-white">
+                    <span className="big-label">EFICIENCIA</span>
+                    <span className="big-val text-yellow">{selectedPlayer.eff}</span>
+                  </div>
+                </div>
+
+                {/* Botón Cerrar Abajo */}
+                <div className="modal-footer">
+                  <button className="modal-close-btn" onClick={() => setSelectedPlayer(null)}>
+                    Cerrar
+                  </button>
+                </div>
+
+              </div>
             </div>
           </div>
         )}
