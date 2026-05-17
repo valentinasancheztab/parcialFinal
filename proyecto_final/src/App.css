@@ -1,104 +1,153 @@
-.dashboard-container {
-  max-width: 1200px;
-  margin: 0 auto;
+.dashboard {
+
+  background: var(--bg-complex);
+  background-attachment: fixed;
+
+  width: 100%;
+  min-height: 100vh;
   padding: 3rem 2rem;
 }
 
-/* --- HEADER --- */
-.dashboard-header {
-  margin-bottom: 2rem;
+/* BEM Modifier para el contenedor principal */
+.dashboard.dashboard--light {
+  /* --- COLORES DEL MODO CLARO ("Café y Gris") --- */
+  --color-purple: #2d1f5a;
+  --color-dark: #1a142b;
+  --glow-brown: #422a1166;
+  --glow-teal: #3d5c61d2;
+  --glow-top-right: #000000f8;
+  --glow-top-left: #54438b;
+
+  /* Redefinimos el fondo completo aquí para forzar al navegador a pintarlo de nuevo */
+  --bg-complex:
+    radial-gradient(circle at 90% 1%, var(--glow-top-right) 8%, transparent 50%),
+    radial-gradient(circle at 30% -20%, var(--glow-top-left) 8%, transparent 30%),
+    radial-gradient(ellipse 200% 100% at 50% -30%, var(--color-purple) 0%, var(--color-purple) 70%, transparent 70.1%),
+    radial-gradient(circle at 5% 40%, var(--glow-brown) 0%, transparent 40%),
+    radial-gradient(circle at 95% 40%, var(--glow-teal) 0%, transparent 40%),
+    var(--color-dark);
 }
 
-.badge {
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+
+
+.dashboard__content {
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: transparent;
 }
 
-.header-main {
+/* --- BEM: ELEMENTS OF 'dashboard' --- */
+.dashboard__header {
+  margin-bottom: 3rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dashboard__header-main {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 0.5rem;
 }
 
-.header-main h1 {
+.dashboard__header-text h1 {
   margin: 0 0 0.5rem 0;
   font-size: 2.5rem;
-  font-weight: 600;
 }
 
-.header-main p {
+.dashboard__header-text p {
   color: var(--text-secondary);
   margin: 0;
-  font-size: 0.95rem;
 }
 
-.theme-toggle {
-  background-color: #31284a;
-  color: var(--accent-yellow);
+/* --- BEM: BLOCK 'badge' --- */
+.badge {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  
+  /* Fondo semi-transparente (cristal) */
+  background-color: rgba(255, 255, 255, 0.05); 
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: inline-block;
+}
+
+.badge--yellow {
+  background-color: var(--accent-yellow);
+  color: #000;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.85rem;
 }
 
-/* --- SCORE SECTION --- */
-.score-section {
+/* --- BEM: BLOCK 'score-board' --- */
+.score-board {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(90deg, rgba(23,17,38,1) 0%, rgba(35,27,55,1) 50%, rgba(23,17,38,1) 100%);
-  padding: 2rem 3rem;
+  background: linear-gradient(90deg, #171126 0%, #231b37 50%, #171126 100%);
+  padding: 1.5rem 3rem;
   border-radius: 20px;
   margin-bottom: 3rem;
-  border: 1px solid rgba(255,255,255,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.team {
-  text-align: center;
+/* --- BEM: ELEMENTS OF 'score-board' --- */
+.score-board__team {
   flex: 1;
 }
 
-.team-home { text-align: left; }
-.team-away { text-align: right; }
-
-.team h2 {
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 700;
+.score-board__team--home {
+  text-align: left;
 }
 
-.team-name {
+.score-board__team--away {
+  text-align: right;
+}
+
+.score-board__team-abbr {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.score-board__team-name {
   color: var(--text-secondary);
   font-size: 0.75rem;
   letter-spacing: 0.05em;
+  display: block;
 }
 
-.score {
+.score-board__score {
   font-size: 3.5rem;
-  font-weight: 700;
+  font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
-.score-number.accent {
+.score-board__number {
+  color: #22d3ee;
+}
+
+.score-board__number--accent {
   color: var(--accent-yellow);
 }
 
-.score-number:not(.accent) {
-  color: var(--accent-cyan);
-}
-
-.score-divider {
+.score-board__divider {
   color: var(--text-secondary);
 }
 
-.match-info {
+.score-board__info {
   flex: 1;
   text-align: right;
   display: flex;
@@ -107,55 +156,8 @@
   gap: 0.5rem;
 }
 
-.badge-yellow {
-  background-color: var(--accent-yellow);
-  color: #000;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 0.8rem;
-}
-
-.venue {
+.score-board__venue {
   color: var(--text-secondary);
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   letter-spacing: 0.05em;
-}
-
-/* --- MAIN DASHBOARD (Buscador) --- */
-.dashboard-main {
-  background-color: var(--card-bg);
-  border-radius: 20px;
-  padding: 2rem;
-}
-
-.search-label {
-  display: block;
-  color: var(--text-secondary);
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
-}
-
-.search-bar {
-  background-color: rgba(0,0,0,0.2);
-  border-radius: 12px;
-  padding: 0.8rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-
-.search-bar input {
-  background: transparent;
-  border: none;
-  color: white;
-  width: 100%;
-  outline: none;
-  font-size: 1rem;
-}
-
-.search-bar input::placeholder {
-  color: var(--text-secondary);
 }

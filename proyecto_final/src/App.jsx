@@ -2,39 +2,54 @@ import { useState } from 'react'
 import './App.css'
 
 function App() {
-  // 1. Creamos la "memoria" (estado). 
-  // isLightMode empieza siendo 'false' (osea, modo oscuro por defecto)
   const [isLightMode, setIsLightMode] = useState(false)
 
-  // 2. Esta función se ejecuta cuando hacemos clic en el botón. 
-  // Simplemente cambia el valor al contrario (de falso a verdadero y viceversa)
   const toggleTheme = () => {
     setIsLightMode(!isLightMode)
   }
 
   return (
-    // 3. Magia: Si isLightMode es verdadero, le agregamos la clase CSS "light-mode"
-    <div className={`dashboard-container ${isLightMode ? 'light-mode' : ''}`}>
+    <div className={`dashboard ${isLightMode ? 'dashboard--light' : ''}`}>
 
-      <header className="dashboard-header">
-        <div className="header-top">
+      <header className="dashboard__header">
+        <div className="dashboard__header-top">
           <span className="badge">TOP CLUB / BASKETBALL</span>
         </div>
 
-        <div className="header-main">
-          <div className="header-text">
+        <div className="dashboard__header-main">
+          <div className="dashboard__header-text">
             <h1>Central de Rendimiento</h1>
             <p>Administra convocatorias, analiza métricas clave y mantén la intensidad de juego en cada partido.</p>
           </div>
 
-          {/* 4. Le decimos al botón que al hacer clic (onClick) ejecute la función. 
-              Además, el texto del botón cambia dependiendo del modo. */}
           <button className="theme-toggle" onClick={toggleTheme}>
             {isLightMode ? '🌙 Modo oscuro' : '☀️ Modo claro'}
           </button>
-
         </div>
       </header>
+
+      <section className="score-board">
+        <div className="score-board__team score-board__team--home">
+          <h2 className="score-board__team-abbr">TCB</h2>
+          <span className="score-board__team-name">TOP CLUB FLAMES</span>
+        </div>
+        
+        <div className="score-board__score">
+          <span className="score-board__number score-board__number--accent">98</span> 
+          <span className="score-board__divider">-</span> 
+          <span className="score-board__number">92</span>
+        </div>
+        
+        <div className="score-board__team score-board__team--away">
+          <h2 className="score-board__team-abbr">RIV</h2>
+          <span className="score-board__team-name">RIVAL ALL-STARS</span>
+        </div>
+        
+        <div className="score-board__info">
+          <div className="badge badge--yellow">Q4 - 01:12</div>
+          <div className="score-board__venue">ARENA CENTRAL - 10 NOV</div>
+        </div>
+      </section>
 
     </div>
   )
