@@ -28,6 +28,30 @@ function App() {
     setIsLightMode(!isLightMode)
   }
 
+  // --- LÓGICA DE FILTRADO Y ORDENAMIENTO ---
+  const filteredPlayers = players.filter(player => 
+    player.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    player.team.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const sortedPlayers = [...filteredPlayers].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'asc' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+
+  const requestSort = (key) => {
+    let direction = 'desc';
+    if (sortConfig.key === key && sortConfig.direction === 'desc') {
+      direction = 'asc';
+    }
+    setSortConfig({ key, direction });
+  };
+
   return (
     <div className={`dashboard ${isLightMode ? 'dashboard--light' : ''}`}>
       <div className="dashboard__content">
@@ -117,6 +141,67 @@ function App() {
             <p className="leader-stat"><span>Eficiencia</span><br/>Kevin Harrell - 27.4 PER</p>
           </div>
         </div>
+
+        {/* --- TABLA DE JUGADORES (Estilo Pixel-Perfect) --- */}
+        <section className="table-section">
+          <div className="table-wrapper">
+            <table className="players-table">
+              <thead>
+                <tr>
+                  <th>FAV</th>
+                  <th onClick={() => requestSort('id')} style={{ cursor: 'pointer' }}># <span className="sort-icon"></span></th>
+                  <th onClick={() => requestSort('name')} style={{ cursor: 'pointer' }}>JUGADOR <span className="sort-icon"></span></th>
+                  <th onClick={() => requestSort('team')} style={{ cursor: 'pointer' }}>EQUIPO <span className="sort-icon"></span></th>
+                  <th onClick={() => requestSort('pos')} style={{ cursor: 'pointer' }} className="active-header">POSICIÓN <span className="sort-icon"></span></th>
+                  <th onClick={() => requestSort('pts')} style={{ cursor: 'pointer' }}>PTS <span className="sort-icon"></span></th>
+                  <th onClick={() => requestSort('reb')} style={{ cursor: 'pointer' }}>REB <span className="sort-icon"></span></th>
+                  <th onClick={() => requestSort('ast')} style={{ cursor: 'pointer' }}>AST <span className="sort-icon"></span></th>
+                  <th onClick={() => requestSort('eff')} style={{ cursor: 'pointer' }}>EFICIENCIA <span className="sort-icon"></span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedPlayers.map((player) => (
+                  <tr key={player.id} onClick={() => setSelectedPlayer(player)}>
+                    <td>
+                      <button className="fav-button" onClick={(e) => { e.stopPropagation(); /* Favoritos pronto */ }}>
+                        <div className="star-icon"></div>
+                      </button>
+                    </td>
+                    <td className="player-id-cell">{player.id.padStart(2, '0')}</td>
+                    <td className="player-name-cell">{player.name}</td>
+                    <td>{player.team}</td>
+                    <td>{player.pos}</td>
+                    <td>{player.pts}</td>
+                    <td>{player.reb}</td>
+                    <td>{player.ast}</td>
+                    <td>{player.eff}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* --- PAGINACIÓN --- */}
+          <div className="table-pagination">
+            <div className="pagination-left">
+              <span>MOSTRAR</span>
+              <select className="pagination-select">
+                <option>5 por página</option>
+                <option>10 por página</option>
+              </select>
+            </div>
+            <div className="pagination-right">
+              <button className="page-btn">«</button>
+              <button className="page-btn">‹</button>
+              <button className="page-btn active">1</button>
+              <button className="page-btn">2</button>
+              <button className="page-btn">3</button>
+              <button className="page-btn">4</button>
+              <button className="page-btn">›</button>
+              <button className="page-btn">»</button>
+            </div>
+          </div>
+        </section>
 
       </div>
     </div>
