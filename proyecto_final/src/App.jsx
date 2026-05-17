@@ -52,6 +52,15 @@ function App() {
     setSortConfig({ key, direction });
   };
 
+  // --- LÓGICA DE FAVORITOS ---
+  const toggleFavorite = (playerId) => {
+    if (favorites.includes(playerId)) {
+      setFavorites(favorites.filter(id => id !== playerId));
+    } else {
+      setFavorites([...favorites, playerId]);
+    }
+  };
+
   return (
     <div className={`dashboard ${isLightMode ? 'dashboard--light' : ''}`}>
       <div className="dashboard__content">
@@ -163,7 +172,13 @@ function App() {
                 {sortedPlayers.map((player) => (
                   <tr key={player.id} onClick={() => setSelectedPlayer(player)}>
                     <td>
-                      <button className="fav-button" onClick={(e) => { e.stopPropagation(); /* Favoritos pronto */ }}>
+                      <button 
+                        className={`fav-button ${favorites.includes(player.id) ? 'fav-active' : ''}`}
+                        onClick={(e) => { 
+                          e.stopPropagation(); 
+                          toggleFavorite(player.id);
+                        }}
+                      >
                         <div className="star-icon"></div>
                       </button>
                     </td>
@@ -202,6 +217,31 @@ function App() {
             </div>
           </div>
         </section>
+
+        {/* --- MODAL DE JUGADOR --- */}
+        {selectedPlayer && (
+          <div className="modal-overlay" onClick={() => setSelectedPlayer(null)}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="modal-close" onClick={() => setSelectedPlayer(null)}>✖</button>
+              <h2>{selectedPlayer.name}</h2>
+              <p className="modal-team">{selectedPlayer.team} • {selectedPlayer.pos}</p>
+              
+              <div className="modal-stats-grid">
+                <div className="m-stat"><span>PTS</span><strong>{selectedPlayer.pts}</strong></div>
+                <div className="m-stat"><span>REB</span><strong>{selectedPlayer.reb}</strong></div>
+                <div className="m-stat"><span>AST</span><strong>{selectedPlayer.ast}</strong></div>
+                <div className="m-stat"><span>EFF</span><strong className="eff-text">{selectedPlayer.eff}</strong></div>
+              </div>
+
+              <button 
+                className="modal-fav-btn"
+                onClick={() => toggleFavorite(selectedPlayer.id)}
+              >
+                {favorites.includes(selectedPlayer.id) ? 'Quitar de Favoritos ⭐' : 'Añadir a Favoritos ⭐'}
+              </button>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>
