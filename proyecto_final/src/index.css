@@ -7,9 +7,9 @@
 
   --color-purple: #201446;
   --color-dark: #100b1a;
-  --glow-brown: rgb(26, 17, 9);
-  --glow-teal: rgba(63, 87, 92, 0.747);
-  --glow-top-right: rgb(0, 0, 0);
+  --glow-brown: #1a1109;
+  --glow-teal: #3f575cbe;
+  --glow-top-right: #000000;
   --glow-top-left: #5a37cc;
 
   --bg-complex:

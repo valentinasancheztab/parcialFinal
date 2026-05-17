@@ -10,7 +10,7 @@
 
 /* BEM Modifier para el contenedor principal */
 .dashboard.dashboard--light {
-  /* --- COLORES DEL MODO CLARO  --- */
+  /* --- colores del modo claro  --- */
   --color-purple: #2d1f5a;
   --color-dark: #1a142b;
   --glow-brown: #422a1166;
@@ -68,7 +68,7 @@
   font-weight: bold;
   letter-spacing: 0.1em;
 
-  /* Fondo semi-transparente (cristal) */
+  /* Fondo semi transparente  */
   background-color: rgba(255, 255, 255, 0.05);
   padding: 0.3rem 0.8rem;
   border-radius: 20px;
@@ -84,7 +84,7 @@
   border: none;
 }
 
-/* --- BEM: BLOCK 'score-board' --- */
+/* ---  'score-board' --- */
 .score-board {
   display: flex;
   justify-content: space-between;
@@ -101,7 +101,7 @@
   margin-right: auto;
 }
 
-/* --- BEM: ELEMENTS OF 'score-board' --- */
+/* --- BEM: elementos 'score-board' --- */
 .score-board__team {
   flex: 1;
 }
@@ -204,7 +204,7 @@
   color: #7f7a96;
 }
 
-/* --- TARJETAS DE ESTADÍSTICAS --- */
+/* ---  Tarjetas de estadisticas --- */
 .stats-grid {
   display: flex;
   justify-content: space-between;
