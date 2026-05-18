@@ -111,7 +111,7 @@ El objetivo principal fue **replicar el diseño de una página deportiva profesi
 
 ---
 
-<h2 style="font-family:'Inter',sans-serif; background:#880E4F; color:#fff; padding:12px; text-align:center; border-radius:6px;">Diseño Visual</h2>
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:880E4F,100:E91E63&height=55&text=%F0%9F%8E%A8+Dise%C3%B1o+Visual&fontSize=24&fontColor=ffffff&fontAlignY=68&fontAlign=7" width="100%"/>
 
 <br/>
 
@@ -130,7 +130,7 @@ El diseño está inspirado en **interfaces deportivas modernas** con una identid
 
 ---
 
-<h2 style="font-family:'Inter',sans-serif; background:#004D40; color:#fff; padding:12px; text-align:center; border-radius:6px;">Estructura del Proyecto</h2>
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:004D40,100:26A69A&height=55&text=%F0%9F%93%82+Estructura+del+Proyecto&fontSize=24&fontColor=ffffff&fontAlignY=68&fontAlign=9" width="100%"/>
 
 <br/>
 
