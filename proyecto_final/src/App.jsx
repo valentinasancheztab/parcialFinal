@@ -142,6 +142,9 @@ function App() {
           </div>
         </section>
 
+        {/* === PANEL PRINCIPAL (recuadro oscuro de fondo) === */}
+        <div className="main-panel">
+
         {/* --- SECCIÓN BUSCADOR --- */}
         <section className="search-section">
           <label className="search-label">BUSCAR JUGADORES</label>
@@ -297,7 +300,8 @@ function App() {
           </div>
         </section>
 
-        {/* --- MODAL DE JUGADOR (ESTILO IMAGEN) --- */}
+        </div>{/* === FIN PANEL PRINCIPAL === */}
+
         {selectedPlayer && (
           <div className="modal-overlay" onClick={() => setSelectedPlayer(null)}>
             <div className="modal-content-wide" onClick={(e) => e.stopPropagation()}>
