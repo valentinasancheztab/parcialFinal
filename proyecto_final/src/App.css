@@ -8,7 +8,7 @@
   padding: 3rem 2rem;
 }
 
-/* BEM Modifier para el contenedor principal */
+
 .dashboard.dashboard--light {
   /* --- colores del modo claro  --- */
   --color-purple: #2d1f5a;
@@ -18,7 +18,7 @@
   --glow-top-right: #000000f8;
   --glow-top-left: #54438b;
 
-  /* Redefinimos ahora para el tema claro */
+  /* Redefinimos */
   --bg-complex:
     radial-gradient(circle at 90% 1%, var(--glow-top-right) 8%, transparent 50%),
     radial-gradient(circle at 30% -20%, var(--glow-top-left) 8%, transparent 30%),
@@ -61,7 +61,7 @@
   margin: 0;
 }
 
-/* --- BEM: BLOCK 'badge' --- */
+
 .badge {
   color: var(--text-secondary);
   font-size: 0.75rem;
@@ -101,7 +101,7 @@
   margin-right: auto;
 }
 
-/* --- BEM: elementos 'score-board' --- */
+/* ---  elementos 'score-board' --- */
 .score-board__team {
   flex: 1;
 }
@@ -727,11 +727,185 @@
   cursor: not-allowed;
 }
 
-/* --- contenedor con borde oscuro de fondo --- */
+/* --- contenedor  de fondo --- */
 .main-panel {
   border: 1px solid rgba(255, 255, 255, 0.1);
   background-color: transparent;
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 2rem;
+}
+
+/* ============================================
+   RESPONSIVE - TABLET (max 1024px)
+   ============================================ */
+@media (max-width: 1024px) {
+  .dashboard {
+    padding: 2rem 1.5rem;
+  }
+
+  .dashboard__header-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .score-board {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .modal-content-wide {
+    max-width: 95%;
+  }
+
+  .modal-big-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .players-table th,
+  .players-table td {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MÓVIL (max 768px)
+   ============================================ */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1.5rem 1rem;
+  }
+
+  /* Header */
+  .dashboard__header-main {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .dashboard__header h1 {
+    font-size: 1.5rem;
+  }
+
+  .theme-toggle {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Marcador */
+  .score-board {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .score-board__score {
+    font-size: 2.5rem;
+  }
+
+  .score-board__team-name {
+    font-size: 0.7rem;
+  }
+
+  /* Panel principal */
+  .main-panel {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  /* Buscador */
+  .search-section {
+    padding: 1rem 0;
+  }
+
+  /* Tarjetas de estadísticas: 1 columna */
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  /* Tabla: scroll horizontal */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .players-table {
+    min-width: 600px;
+  }
+
+  .players-table th,
+  .players-table td {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  /* Paginación */
+  .table-pagination {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .pagination-right {
+    flex-wrap: wrap;
+  }
+
+  /* Modal */
+  .modal-content-wide {
+    width: 98%;
+    border-radius: 10px;
+  }
+
+  .modal-top-bar h2 {
+    font-size: 1.1rem;
+  }
+
+  .modal-info-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .modal-big-stats {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .big-val {
+    font-size: 2rem;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MÓVIL PEQUEÑO (max 480px)
+   ============================================ */
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .score-board__number {
+    font-size: 2.5rem;
+  }
+
+  .history-chips {
+    gap: 0.4rem;
+  }
+
+  .history-chip {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+  }
+
+  .page-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.75rem;
+  }
 }

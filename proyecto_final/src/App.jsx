@@ -4,7 +4,7 @@ import './App.css'
 function App() {
   const [isLightMode, setIsLightMode] = useState(false)
 
-  // --- DATOS DE LOS JUGADORES ---
+
   const [players] = useState([
     { id: '03', name: 'Kevin Harrell', team: 'Top Club', pos: 'Guard', pts: 24.5, reb: 4.1, ast: 6.8, eff: 27.4, age: 28, height: '1.93 m', weight: '95 kg' },
     { id: '05', name: 'James Fletcher', team: 'Top Club', pos: 'Center', pts: 18.9, reb: 11.7, ast: 2.4, eff: 25.1, age: 30, height: '2.11 m', weight: '115 kg' },
@@ -18,7 +18,7 @@ function App() {
     { id: '15', name: 'Nikola Jokic', team: 'Denver Nuggets', pos: 'Center', pts: 19.6, reb: 7.2, ast: 3.8, eff: 23.7, age: 31, height: '2.11 m', weight: '129 kg' }
   ]);
 
-  // --- ESTADOS PARA LA TABLA Y EL MODAL ---
+
   const [searchTerm, setSearchTerm] = useState('');
   const [searchHistory, setSearchHistory] = useState([]); // Historial de búsqueda
   const [favorites, setFavorites] = useState([]);
@@ -145,160 +145,164 @@ function App() {
         {/* === PANEL PRINCIPAL (recuadro oscuro de fondo) === */}
         <div className="main-panel">
 
-        {/* --- SECCIÓN BUSCADOR --- */}
-        <section className="search-section">
-          <label className="search-label">BUSCAR JUGADORES</label>
-          <div className="search-input-wrapper">
-            <span className="search-icon">🔍</span>
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Escribe un nombre o equipo..."
-              value={searchTerm}
-              onChange={(e) => handleSearch(e.target.value)}
-            />
-            {searchTerm && (
-              <button className="search-clear-btn" onClick={clearSearch}>✖</button>
-            )}
-            {searchTerm && (
-              <button className="search-limpiar-btn" onClick={clearSearch}>Limpiar</button>
-            )}
-          </div>
-        </section>
+          {/* --- SECCIÓN BUSCADOR --- */}
+          <section className="search-section">
+            <label className="search-label">BUSCAR JUGADORES</label>
+            <div className="search-input-wrapper">
+              <span className="search-icon">🔍</span>
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Escribe un nombre o equipo..."
+                value={searchTerm}
+                onChange={(e) => handleSearch(e.target.value)}
+              />
+              {searchTerm && (
+                <button className="search-clear-btn" onClick={clearSearch}>✖</button>
+              )}
+              {searchTerm && (
+                <button className="search-limpiar-btn" onClick={clearSearch}>Limpiar</button>
+              )}
+            </div>
+          </section>
 
-        {/* --- TARJETAS DE ESTADÍSTICAS --- */}
-        <div className="stats-grid">
-          <div className="stat-card stat-card--yellow">
-            <h3>JUGADORES EN TABLA</h3>
-            <p className="stat-number">{filteredPlayers.length}</p>
-            <span className="badge badge--dark">Favoritos: {favorites.length}</span>
-          </div>
+          {/* --- TARJETAS DE ESTADÍSTICAS --- */}
+          <div className="stats-grid">
+            <div className="stat-card stat-card--yellow">
+              <h3>JUGADORES EN TABLA</h3>
+              <p className="stat-number">{filteredPlayers.length}</p>
+              <span className="badge badge--dark">Favoritos: {favorites.length}</span>
+            </div>
 
-          <div className="stat-card">
-            <h3>PROMEDIO DE PUNTOS</h3>
-            <p className="stat-number">
-              {filteredPlayers.length > 0
-                ? (filteredPlayers.reduce((sum, p) => sum + p.pts, 0) / filteredPlayers.length).toFixed(1)
-                : '0.0'}
-            </p>
-          </div>
+            <div className="stat-card">
+              <h3>PROMEDIO DE PUNTOS</h3>
+              <p className="stat-number">
+                {filteredPlayers.length > 0
+                  ? (filteredPlayers.reduce((sum, p) => sum + p.pts, 0) / filteredPlayers.length).toFixed(1)
+                  : '0.0'}
+              </p>
+            </div>
 
-          <div className="stat-card">
-            <h3>PROMEDIO DE REBOTES</h3>
-            <p className="stat-number">
-              {filteredPlayers.length > 0
-                ? (filteredPlayers.reduce((sum, p) => sum + p.reb, 0) / filteredPlayers.length).toFixed(1)
-                : '0.0'}
-            </p>
-          </div>
+            <div className="stat-card">
+              <h3>PROMEDIO DE REBOTES</h3>
+              <p className="stat-number">
+                {filteredPlayers.length > 0
+                  ? (filteredPlayers.reduce((sum, p) => sum + p.reb, 0) / filteredPlayers.length).toFixed(1)
+                  : '0.0'}
+              </p>
+            </div>
 
-          <div className="stat-card stat-card--leaders">
-            <h3>LÍDERES</h3>
-            {filteredPlayers.length > 0 ? (
-              <>
-                <p className="leader-stat"><span>Anotador</span><br />{sortedPlayers[0]?.name} - {sortedPlayers[0]?.pts} pts</p>
-                <p className="leader-stat"><span>Eficiencia</span><br />{sortedPlayers[0]?.name} - {sortedPlayers[0]?.eff} PER</p>
-              </>
-            ) : (
-              <p className="leader-stat">Sin datos</p>
-            )}
-          </div>
+            <div className="stat-card stat-card--leaders">
+              <h3>LÍDERES</h3>
+              {filteredPlayers.length > 0 ? (
+                <>
+                  <p className="leader-stat"><span>Anotador</span><br />{sortedPlayers[0]?.name} - {sortedPlayers[0]?.pts} pts</p>
+                  <p className="leader-stat"><span>Eficiencia</span><br />{sortedPlayers[0]?.name} - {sortedPlayers[0]?.eff} PER</p>
+                </>
+              ) : (
+                <p className="leader-stat">Sin datos</p>
+              )}
+            </div>
 
-          {/* --- HISTORIAL DE BÚSQUEDA --- */}
-          {searchHistory.length > 0 && (
+            {/* --- HISTORIAL DE BÚSQUEDA --- */}
             <div className="stat-card stat-card--history">
               <div className="history-header">
                 <h3>HISTORIAL DE BÚSQUEDA</h3>
-                <button className="history-clear-btn" onClick={clearHistory}>Limpiar</button>
+                {searchHistory.length > 0 && (
+                  <button className="history-clear-btn" onClick={clearHistory}>Limpiar</button>
+                )}
               </div>
               <div className="history-chips">
-                {searchHistory.map((term, i) => (
-                  <button key={i} className="history-chip" onClick={() => handleSearch(term)}>
-                    {term}
-                  </button>
-                ))}
+                {searchHistory.length > 0 ? (
+                  searchHistory.map((term, i) => (
+                    <button key={i} className="history-chip" onClick={() => handleSearch(term)}>
+                      {term}
+                    </button>
+                  ))
+                ) : (
+                  <span className="history-empty">Sin búsquedas recientes</span>
+                )}
               </div>
             </div>
-          )}
-        </div>
+          </div>
 
-        {/* --- TABLA DE JUGADORES (Estilo Pixel-Perfect) --- */}
-        <section className="table-section">
-          <div className="table-wrapper">
-            <table className="players-table">
-              <thead>
-                <tr>
-                  <th>FAV</th>
-                  <th onClick={() => requestSort('id')} style={{ cursor: 'pointer' }}># <span className="sort-icon"></span></th>
-                  <th onClick={() => requestSort('name')} style={{ cursor: 'pointer' }}>JUGADOR <span className="sort-icon"></span></th>
-                  <th onClick={() => requestSort('team')} style={{ cursor: 'pointer' }}>EQUIPO <span className="sort-icon"></span></th>
-                  <th onClick={() => requestSort('pos')} style={{ cursor: 'pointer' }} className="active-header">POSICIÓN <span className="sort-icon"></span></th>
-                  <th onClick={() => requestSort('pts')} style={{ cursor: 'pointer' }}>PTS <span className="sort-icon"></span></th>
-                  <th onClick={() => requestSort('reb')} style={{ cursor: 'pointer' }}>REB <span className="sort-icon"></span></th>
-                  <th onClick={() => requestSort('ast')} style={{ cursor: 'pointer' }}>AST <span className="sort-icon"></span></th>
-                  <th onClick={() => requestSort('eff')} style={{ cursor: 'pointer' }}>EFICIENCIA <span className="sort-icon"></span></th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedPlayers.length > 0 ? paginatedPlayers.map((player) => (
-                  <tr key={player.id} onClick={() => setSelectedPlayer(player)}>
-                    <td>
-                      <button
-                        className={`fav-button ${favorites.includes(player.id) ? 'fav-active' : ''}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleFavorite(player.id);
-                        }}
-                      >
-                        <div className="star-icon"></div>
-                      </button>
-                    </td>
-                    <td className="player-id-cell">{player.id.padStart(2, '0')}</td>
-                    <td className="player-name-cell">{player.name}</td>
-                    <td>{player.team}</td>
-                    <td>{player.pos}</td>
-                    <td>{player.pts}</td>
-                    <td>{player.reb}</td>
-                    <td>{player.ast}</td>
-                    <td>{player.eff}</td>
+          {/* --- TABLA DE JUGADORES (Estilo Pixel-Perfect) --- */}
+          <section className="table-section">
+            <div className="table-wrapper">
+              <table className="players-table">
+                <thead>
+                  <tr>
+                    <th>FAV</th>
+                    <th onClick={() => requestSort('id')} style={{ cursor: 'pointer' }}># <span className="sort-icon"></span></th>
+                    <th onClick={() => requestSort('name')} style={{ cursor: 'pointer' }}>JUGADOR <span className="sort-icon"></span></th>
+                    <th onClick={() => requestSort('team')} style={{ cursor: 'pointer' }}>EQUIPO <span className="sort-icon"></span></th>
+                    <th onClick={() => requestSort('pos')} style={{ cursor: 'pointer' }} className="active-header">POSICIÓN <span className="sort-icon"></span></th>
+                    <th onClick={() => requestSort('pts')} style={{ cursor: 'pointer' }}>PTS <span className="sort-icon"></span></th>
+                    <th onClick={() => requestSort('reb')} style={{ cursor: 'pointer' }}>REB <span className="sort-icon"></span></th>
+                    <th onClick={() => requestSort('ast')} style={{ cursor: 'pointer' }}>AST <span className="sort-icon"></span></th>
+                    <th onClick={() => requestSort('eff')} style={{ cursor: 'pointer' }}>EFICIENCIA <span className="sort-icon"></span></th>
                   </tr>
-                )) : (
-                  <tr><td colSpan="9" style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>No se encontraron jugadores</td></tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {paginatedPlayers.length > 0 ? paginatedPlayers.map((player) => (
+                    <tr key={player.id} onClick={() => setSelectedPlayer(player)}>
+                      <td>
+                        <button
+                          className={`fav-button ${favorites.includes(player.id) ? 'fav-active' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleFavorite(player.id);
+                          }}
+                        >
+                          <div className="star-icon"></div>
+                        </button>
+                      </td>
+                      <td className="player-id-cell">{player.id.padStart(2, '0')}</td>
+                      <td className="player-name-cell">{player.name}</td>
+                      <td>{player.team}</td>
+                      <td>{player.pos}</td>
+                      <td>{player.pts}</td>
+                      <td>{player.reb}</td>
+                      <td>{player.ast}</td>
+                      <td>{player.eff}</td>
+                    </tr>
+                  )) : (
+                    <tr><td colSpan="9" style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>No se encontraron jugadores</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
 
-          {/* --- PAGINACIÓN FUNCIONAL --- */}
-          <div className="table-pagination">
-            <div className="pagination-left">
-              <span>MOSTRAR</span>
-              <select className="pagination-select" value={itemsPerPage} onChange={handleItemsPerPage}>
-                <option value={5}>5 por página</option>
-                <option value={10}>10 por página</option>
-                <option value={15}>15 por página</option>
-              </select>
-              <span className="pagination-info">
-                {Math.min((currentPage - 1) * itemsPerPage + 1, sortedPlayers.length)}-{Math.min(currentPage * itemsPerPage, sortedPlayers.length)} de {sortedPlayers.length}
-              </span>
+            {/* --- PAGINACIÓN FUNCIONAL --- */}
+            <div className="table-pagination">
+              <div className="pagination-left">
+                <span>MOSTRAR</span>
+                <select className="pagination-select" value={itemsPerPage} onChange={handleItemsPerPage}>
+                  <option value={5}>5 por página</option>
+                  <option value={10}>10 por página</option>
+                  <option value={15}>15 por página</option>
+                </select>
+                <span className="pagination-info">
+                  {Math.min((currentPage - 1) * itemsPerPage + 1, sortedPlayers.length)}-{Math.min(currentPage * itemsPerPage, sortedPlayers.length)} de {sortedPlayers.length}
+                </span>
+              </div>
+              <div className="pagination-right">
+                <button className="page-btn" onClick={() => goToPage(1)} disabled={currentPage === 1}>«</button>
+                <button className="page-btn" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>‹</button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <button
+                    key={page}
+                    className={`page-btn ${currentPage === page ? 'active' : ''}`}
+                    onClick={() => goToPage(page)}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button className="page-btn" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>›</button>
+                <button className="page-btn" onClick={() => goToPage(totalPages)} disabled={currentPage === totalPages}>»</button>
+              </div>
             </div>
-            <div className="pagination-right">
-              <button className="page-btn" onClick={() => goToPage(1)} disabled={currentPage === 1}>«</button>
-              <button className="page-btn" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>‹</button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                <button
-                  key={page}
-                  className={`page-btn ${currentPage === page ? 'active' : ''}`}
-                  onClick={() => goToPage(page)}
-                >
-                  {page}
-                </button>
-              ))}
-              <button className="page-btn" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>›</button>
-              <button className="page-btn" onClick={() => goToPage(totalPages)} disabled={currentPage === totalPages}>»</button>
-            </div>
-          </div>
-        </section>
+          </section>
 
         </div>{/* === FIN PANEL PRINCIPAL === */}
 
