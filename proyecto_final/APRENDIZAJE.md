@@ -212,6 +212,7 @@ Uso en el proyecto:
 - Ayuda en la implementación de nuevas funcionalidades
 - Ayuda en la corrección de errores
 - Ayuda en el Readme
+- ayuda con la implementacion del useEffect, useMemo
 
 ### 👤 Autor
 
