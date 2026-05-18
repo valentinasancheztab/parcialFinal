@@ -1,18 +1,77 @@
-# React + Vite
+# 🏀 Central de Rendimiento Basketball
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+  <img width="900" alt="preview" src="./assets/preview.png">
+</p>
 
-Currently, two official plugins are available:
+<p align="center">
+  <b>Replica moderna de una plataforma de estadísticas de jugadores de basketball.</b><br>
+  Diseño dinámico, modo oscuro/claro, sistema de favoritos y visualización detallada de jugadores.
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+# ✨ Descripción
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+Este proyecto consiste en la recreación de una interfaz web inspirada en una plataforma profesional de rendimiento deportivo para jugadores de basketball.
 
-Note: This will impact Vite dev & build performances.
+La aplicación permite visualizar estadísticas, explorar jugadores, marcar favoritos y alternar entre modo oscuro y claro mediante una interfaz moderna e interactiva.
 
-## Expanding the ESLint configuration
+El objetivo principal fue replicar el diseño de una página deportiva profesional aplicando buenas prácticas de maquetación, estilos y componentes dinámicos con React.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+# 🚀 Funcionalidades
+
+✔️ Visualización de estadísticas de jugadores  
+✔️ Tabla dinámica de jugadores  
+✔️ Sistema de favoritos ⭐  
+✔️ Cambio entre modo oscuro 🌙 y modo claro ☀️  
+✔️ Vista detallada de cada jugador  
+✔️ Diseño moderno y responsive  
+✔️ Barra de búsqueda de jugadores  
+✔️ Interfaz inspirada en dashboards deportivos profesionales
+
+---
+
+# 🛠️ Tecnologías Utilizadas
+
+<div align="center">
+
+| Tecnología | Uso |
+|---|---|
+| React | Componentes dinámicos |
+| HTML5 | Estructura del proyecto |
+| CSS3 | Estilos y diseño visual |
+| BEM | Organización de clases CSS |
+| GitHub | Control de versiones |
+| Netlify | Despliegue del proyecto |
+
+</div>
+
+---
+
+# 🎨 Diseño
+
+El diseño está inspirado en interfaces deportivas modernas con:
+
+- Gradientes oscuros
+- Tarjetas iluminadas
+- Colores neón
+- Tipografía moderna
+- Componentes interactivos
+- Experiencia visual limpia y profesional
+
+---
+
+# 📂 Estructura del Proyecto
+
+```bash
+📦 basketball-dashboard
+ ┣ 📂 assets
+ ┣ 📂 components
+ ┣ 📂 css
+ ┣ 📂 js
+ ┣ 📜 App.jsx
+ ┣ 📜 main.jsx
+ ┗ 📜 README.md
