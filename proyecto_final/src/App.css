@@ -451,7 +451,7 @@
   color: white;
 }
 
-/* Barra superior más oscura (donde va el nombre y la X) */
+/* Barra superior más oscura */
 .modal-top-bar {
   background-color: #150f26;
   padding: 1.2rem 1.5rem;
@@ -506,7 +506,7 @@
   font-size: 0.9rem;
 }
 
-/* Botón de Favorito (pequeño, arriba a la derecha) */
+/* Botón de Favorito  */
 .modal-fav-btn-small {
   background-color: var(--accent-yellow);
   color: black;
@@ -524,7 +524,7 @@
   box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
 }
 
-/* Cuadrícula de Info (3 columnas) */
+/* (3 columnas) */
 .modal-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -562,7 +562,7 @@
   color: white;
 }
 
-/* --- OVERLAY (fondo oscuro detrás del modal) --- */
+/* ---  (fondo oscuro detrás del modal) --- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -577,7 +577,7 @@
   backdrop-filter: blur(4px);
 }
 
-/* --- TARJETAS GRANDES (Puntos, Rebotes, Eficiencia) --- */
+/* --- TARJETAS GRANDES*/
 .modal-big-stats {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -628,7 +628,7 @@
   color: var(--accent-yellow);
 }
 
-/* --- FOOTER (botón Cerrar) --- */
+/* ---  (botón Cerrar) --- */
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -647,4 +647,82 @@
 
 .modal-close-btn:hover {
   opacity: 0.8;
+}
+
+/* --- historial de busqueda --- */
+.stat-card--history {
+  grid-column: span 1;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.history-clear-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  border: none;
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+}
+
+.history-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.history-chip {
+  background-color: var(--accent-yellow);
+  color: black;
+  border: none;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.history-chip:hover {
+  opacity: 0.8;
+}
+
+/* --- boton de buscador y Limpiar) --- */
+.search-clear-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0 0.5rem;
+}
+
+.search-limpiar-btn {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* --- texto informativo --- */
+.pagination-info {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+/* Botones deshabilitados */
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }

@@ -32,8 +32,8 @@ function App() {
   }
 
   // --- LÓGICA DE FILTRADO Y ORDENAMIENTO ---
-  const filteredPlayers = players.filter(player => 
-    player.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredPlayers = players.filter(player =>
+    player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     player.team.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -99,7 +99,7 @@ function App() {
   return (
     <div className={`dashboard ${isLightMode ? 'dashboard--light' : ''}`}>
       <div className="dashboard__content">
-        
+
         {/* --- SECCIÓN 1: HEADER --- */}
         <header className="dashboard__header">
           <div className="dashboard__header-top">
@@ -124,18 +124,18 @@ function App() {
             <h2 className="score-board__team-abbr">TCB</h2>
             <span className="score-board__team-name">TOP CLUB FLAMES</span>
           </div>
-          
+
           <div className="score-board__score">
-            <span className="score-board__number score-board__number--accent">98</span> 
-            <span className="score-board__divider">-</span> 
+            <span className="score-board__number score-board__number--accent">98</span>
+            <span className="score-board__divider">-</span>
             <span className="score-board__number">92</span>
           </div>
-          
+
           <div className="score-board__team score-board__team--away">
             <h2 className="score-board__team-abbr">RIV</h2>
             <span className="score-board__team-name">RIVAL ALL-STARS</span>
           </div>
-          
+
           <div className="score-board__info">
             <div className="badge badge--yellow">Q4 - 01:12</div>
             <div className="score-board__venue">ARENA CENTRAL - 18 NOV</div>
@@ -147,9 +147,9 @@ function App() {
           <label className="search-label">BUSCAR JUGADORES</label>
           <div className="search-input-wrapper">
             <span className="search-icon">🔍</span>
-            <input 
-              type="text" 
-              className="search-input" 
+            <input
+              type="text"
+              className="search-input"
               placeholder="Escribe un nombre o equipo..."
               value={searchTerm}
               onChange={(e) => handleSearch(e.target.value)}
@@ -167,29 +167,56 @@ function App() {
         <div className="stats-grid">
           <div className="stat-card stat-card--yellow">
             <h3>JUGADORES EN TABLA</h3>
-            <p className="stat-number">{players.length}</p>
+            <p className="stat-number">{filteredPlayers.length}</p>
             <span className="badge badge--dark">Favoritos: {favorites.length}</span>
           </div>
 
           <div className="stat-card">
             <h3>PROMEDIO DE PUNTOS</h3>
             <p className="stat-number">
-              {(players.reduce((sum, p) => sum + p.pts, 0) / players.length).toFixed(1)}
+              {filteredPlayers.length > 0
+                ? (filteredPlayers.reduce((sum, p) => sum + p.pts, 0) / filteredPlayers.length).toFixed(1)
+                : '0.0'}
             </p>
           </div>
 
           <div className="stat-card">
             <h3>PROMEDIO DE REBOTES</h3>
             <p className="stat-number">
-              {(players.reduce((sum, p) => sum + p.reb, 0) / players.length).toFixed(1)}
+              {filteredPlayers.length > 0
+                ? (filteredPlayers.reduce((sum, p) => sum + p.reb, 0) / filteredPlayers.length).toFixed(1)
+                : '0.0'}
             </p>
           </div>
-          
+
           <div className="stat-card stat-card--leaders">
             <h3>LÍDERES</h3>
-            <p className="leader-stat"><span>Anotador</span><br/>Kevin Harrell - 24.5 pts</p>
-            <p className="leader-stat"><span>Eficiencia</span><br/>Kevin Harrell - 27.4 PER</p>
+            {filteredPlayers.length > 0 ? (
+              <>
+                <p className="leader-stat"><span>Anotador</span><br />{sortedPlayers[0]?.name} - {sortedPlayers[0]?.pts} pts</p>
+                <p className="leader-stat"><span>Eficiencia</span><br />{sortedPlayers[0]?.name} - {sortedPlayers[0]?.eff} PER</p>
+              </>
+            ) : (
+              <p className="leader-stat">Sin datos</p>
+            )}
           </div>
+
+          {/* --- HISTORIAL DE BÚSQUEDA --- */}
+          {searchHistory.length > 0 && (
+            <div className="stat-card stat-card--history">
+              <div className="history-header">
+                <h3>HISTORIAL DE BÚSQUEDA</h3>
+                <button className="history-clear-btn" onClick={clearHistory}>Limpiar</button>
+              </div>
+              <div className="history-chips">
+                {searchHistory.map((term, i) => (
+                  <button key={i} className="history-chip" onClick={() => handleSearch(term)}>
+                    {term}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* --- TABLA DE JUGADORES (Estilo Pixel-Perfect) --- */}
@@ -213,10 +240,10 @@ function App() {
                 {paginatedPlayers.length > 0 ? paginatedPlayers.map((player) => (
                   <tr key={player.id} onClick={() => setSelectedPlayer(player)}>
                     <td>
-                      <button 
+                      <button
                         className={`fav-button ${favorites.includes(player.id) ? 'fav-active' : ''}`}
-                        onClick={(e) => { 
-                          e.stopPropagation(); 
+                        onClick={(e) => {
+                          e.stopPropagation();
                           toggleFavorite(player.id);
                         }}
                       >
@@ -233,7 +260,7 @@ function App() {
                     <td>{player.eff}</td>
                   </tr>
                 )) : (
-                  <tr><td colSpan="9" style={{textAlign:'center', padding:'2rem', color:'#6b7280'}}>No se encontraron jugadores</td></tr>
+                  <tr><td colSpan="9" style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>No se encontraron jugadores</td></tr>
                 )}
               </tbody>
             </table>
@@ -256,7 +283,7 @@ function App() {
               <button className="page-btn" onClick={() => goToPage(1)} disabled={currentPage === 1}>«</button>
               <button className="page-btn" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>‹</button>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                <button 
+                <button
                   key={page}
                   className={`page-btn ${currentPage === page ? 'active' : ''}`}
                   onClick={() => goToPage(page)}
@@ -274,7 +301,7 @@ function App() {
         {selectedPlayer && (
           <div className="modal-overlay" onClick={() => setSelectedPlayer(null)}>
             <div className="modal-content-wide" onClick={(e) => e.stopPropagation()}>
-              
+
               {/* --- Barra Superior (Gris) --- */}
               <div className="modal-top-bar">
                 <h2>{selectedPlayer.name}</h2>
@@ -283,14 +310,14 @@ function App() {
 
               {/* --- Cuerpo Principal (Morado) --- */}
               <div className="modal-body-content">
-                
+
                 {/* Placa y Botón Favorito */}
                 <div className="modal-badge-row">
                   <div className="badge-group">
                     <span className="badge badge--yellow">{selectedPlayer.pos.toUpperCase()}</span>
                     <span className="player-id-faint">#{selectedPlayer.id}</span>
                   </div>
-                  <button 
+                  <button
                     className={`modal-fav-btn-small ${favorites.includes(selectedPlayer.id) ? 'active' : ''}`}
                     onClick={() => toggleFavorite(selectedPlayer.id)}
                   >
