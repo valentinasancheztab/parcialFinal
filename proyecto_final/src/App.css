@@ -312,7 +312,7 @@
 }
 
 .players-table th.active-header {
-  color: #3b82f6;
+  color: #f9fafbd0;
 
 }
 
@@ -438,7 +438,7 @@
   color: black;
 }
 
-/* --- MODAL CONTENEDOR PRINCIPAL --- */
+
 .modal-content-wide {
   background-color: #1e1534;
   /* Fondo morado oscuro */
@@ -524,7 +524,7 @@
   box-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
 }
 
-/* (3 columnas) */
+/* 3 columnas */
 .modal-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -562,7 +562,7 @@
   color: white;
 }
 
-/* ---  (fondo oscuro detrás del modal) --- */
+/* ---  fondo oscuro detrás del modal --- */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -628,7 +628,7 @@
   color: var(--accent-yellow);
 }
 
-/* ---  (botón Cerrar) --- */
+/* ---  botón Cerrar --- */
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -693,7 +693,7 @@
   opacity: 0.8;
 }
 
-/* --- boton de buscador y Limpiar) --- */
+/* --- boton de buscador y Limpiar --- */
 .search-clear-btn {
   background: none;
   border: none;
@@ -721,7 +721,7 @@
   font-size: 0.75rem;
 }
 
-/* Botones deshabilitados */
+
 .page-btn:disabled {
   opacity: 0.3;
   cursor: not-allowed;
@@ -735,6 +735,54 @@
   padding: 1.5rem;
   margin-bottom: 2rem;
 }
+
+/* --- BOTONES FILAS PARES / IMPARES --- */
+.row-filter-bar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.row-filter-btn {
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.45rem 1.1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.row-filter-btn:hover {
+  border-color: var(--accent-yellow);
+  color: var(--accent-yellow);
+}
+
+.row-filter-btn.active {
+  background-color: var(--accent-yellow);
+  color: black;
+  border-color: var(--accent-yellow);
+}
+
+.row-filter-btn--clear:hover {
+  border-color: #9ca3af;
+  color: white;
+}
+
+/* --- FILA RESALTADA (Amarillo claro) --- */
+.row-highlighted {
+  background-color: #fffbeb !important;
+  /* Amarillo muy suave */
+}
+
+.row-highlighted td {
+  color: #111827 !important;
+}
+
 
 /* ============================================
    RESPONSIVE - TABLET (max 1024px)
@@ -881,6 +929,8 @@
     font-size: 2rem;
   }
 }
+
+
 
 /* ============================================
    RESPONSIVE - MÓVIL PEQUEÑO (max 480px)

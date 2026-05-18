@@ -20,12 +20,13 @@ function App() {
 
 
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchHistory, setSearchHistory] = useState([]); // Historial de búsqueda
+  const [searchHistory, setSearchHistory] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'eff', direction: 'desc' });
   const [selectedPlayer, setSelectedPlayer] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1); // Página actual
-  const [itemsPerPage, setItemsPerPage] = useState(5); // Jugadores por página
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [rowHighlight, setRowHighlight] = useState('none'); // 'none' | 'even' | 'odd'
 
   const toggleTheme = () => {
     setIsLightMode(!isLightMode)
@@ -226,7 +227,22 @@ function App() {
             </div>
           </div>
 
-          {/* --- TABLA DE JUGADORES (Estilo Pixel-Perfect) --- */}
+          {/* --- BOTONES FILAS PARES / IMPARES --- */}
+          <div className="row-filter-bar">
+            <button
+              className={`row-filter-btn ${rowHighlight === 'even' ? 'active' : ''}`}
+              onClick={() => setRowHighlight(rowHighlight === 'even' ? 'none' : 'even')}
+            >FILAS PARES</button>
+            <button
+              className={`row-filter-btn ${rowHighlight === 'odd' ? 'active' : ''}`}
+              onClick={() => setRowHighlight(rowHighlight === 'odd' ? 'none' : 'odd')}
+            >FILAS IMPARES</button>
+            <button
+              className="row-filter-btn row-filter-btn--clear"
+              onClick={() => setRowHighlight('none')}
+            >LIMPIAR RESALTADO</button>
+          </div>
+
           <section className="table-section">
             <div className="table-wrapper">
               <table className="players-table">
@@ -244,29 +260,38 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedPlayers.length > 0 ? paginatedPlayers.map((player) => (
-                    <tr key={player.id} onClick={() => setSelectedPlayer(player)}>
-                      <td>
-                        <button
-                          className={`fav-button ${favorites.includes(player.id) ? 'fav-active' : ''}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleFavorite(player.id);
-                          }}
-                        >
-                          <div className="star-icon"></div>
-                        </button>
-                      </td>
-                      <td className="player-id-cell">{player.id.padStart(2, '0')}</td>
-                      <td className="player-name-cell">{player.name}</td>
-                      <td>{player.team}</td>
-                      <td>{player.pos}</td>
-                      <td>{player.pts}</td>
-                      <td>{player.reb}</td>
-                      <td>{player.ast}</td>
-                      <td>{player.eff}</td>
-                    </tr>
-                  )) : (
+                  {paginatedPlayers.length > 0 ? paginatedPlayers.map((player, index) => {
+                    const isHighlighted =
+                      (rowHighlight === 'even' && index % 2 === 0) ||
+                      (rowHighlight === 'odd' && index % 2 !== 0);
+                    return (
+                      <tr
+                        key={player.id}
+                        onClick={() => setSelectedPlayer(player)}
+                        className={isHighlighted ? 'row-highlighted' : ''}
+                      >
+                        <td>
+                          <button
+                            className={`fav-button ${favorites.includes(player.id) ? 'fav-active' : ''}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleFavorite(player.id);
+                            }}
+                          >
+                            <div className="star-icon"></div>
+                          </button>
+                        </td>
+                        <td className="player-id-cell">{player.id.padStart(2, '0')}</td>
+                        <td className="player-name-cell">{player.name}</td>
+                        <td>{player.team}</td>
+                        <td>{player.pos}</td>
+                        <td>{player.pts}</td>
+                        <td>{player.reb}</td>
+                        <td>{player.ast}</td>
+                        <td>{player.eff}</td>
+                      </tr>
+                    );
+                  }) : (
                     <tr><td colSpan="9" style={{ textAlign: 'center', padding: '2rem', color: '#6b7280' }}>No se encontraron jugadores</td></tr>
                   )}
                 </tbody>
