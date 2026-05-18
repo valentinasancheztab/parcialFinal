@@ -1,9 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import './App.css'
 
 function App() {
   const [isLightMode, setIsLightMode] = useState(false)
-
 
   const [players] = useState([
     { id: '03', name: 'Kevin Harrell', team: 'Top Club', pos: 'Guard', pts: 24.5, reb: 4.1, ast: 6.8, eff: 27.4, age: 28, height: '1.93 m', weight: '95 kg' },
@@ -18,35 +17,70 @@ function App() {
     { id: '15', name: 'Nikola Jokic', team: 'Denver Nuggets', pos: 'Center', pts: 19.6, reb: 7.2, ast: 3.8, eff: 23.7, age: 31, height: '2.11 m', weight: '129 kg' }
   ]);
 
-
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [searchHistory, setSearchHistory] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: 'eff', direction: 'desc' });
   const [selectedPlayer, setSelectedPlayer] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
-  const [rowHighlight, setRowHighlight] = useState('none'); // 'none' | 'even' | 'odd'
+  const [rowHighlight, setRowHighlight] = useState('none');
 
   const toggleTheme = () => {
     setIsLightMode(!isLightMode)
   }
 
-  // --- LÓGICA DE FILTRADO Y ORDENAMIENTO ---
-  const filteredPlayers = players.filter(player =>
-    player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    player.team.toLowerCase().includes(searchTerm.toLowerCase())
+  // este useEffect permite que se haga una pausa de 300ms antes de que se muestre el resultado de la busqueda
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+
+  useEffect(() => {
+    if (selectedPlayer) {
+      document.title = `${selectedPlayer.name} | Central de Rendimiento`;
+    } else {
+      document.title = 'Central de Rendimiento';
+    }
+  }, [selectedPlayer]);
+
+
+  const filteredPlayers = useMemo(() => {
+    return players.filter(player =>
+      player.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+      player.team.toLowerCase().includes(debouncedSearch.toLowerCase())
+    );
+  }, [players, debouncedSearch]);
+
+
+  const sortedPlayers = useMemo(() => {
+    return [...filteredPlayers].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? -1 : 1;
+      }
+      if (a[sortConfig.key] > b[sortConfig.key]) {
+        return sortConfig.direction === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }, [filteredPlayers, sortConfig]);
+
+  const totalPages = useMemo(
+    () => Math.max(1, Math.ceil(sortedPlayers.length / itemsPerPage)),
+    [sortedPlayers, itemsPerPage]
   );
 
-  const sortedPlayers = [...filteredPlayers].sort((a, b) => {
-    if (a[sortConfig.key] < b[sortConfig.key]) {
-      return sortConfig.direction === 'asc' ? -1 : 1;
-    }
-    if (a[sortConfig.key] > b[sortConfig.key]) {
-      return sortConfig.direction === 'asc' ? 1 : -1;
-    }
-    return 0;
-  });
+
+  const paginatedPlayers = useMemo(() => {
+    return sortedPlayers.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    );
+  }, [sortedPlayers, currentPage, itemsPerPage]);
 
   const requestSort = (key) => {
     let direction = 'desc';
@@ -56,7 +90,6 @@ function App() {
     setSortConfig({ key, direction });
   };
 
-  // --- LÓGICA DE FAVORITOS ---
   const toggleFavorite = (playerId) => {
     if (favorites.includes(playerId)) {
       setFavorites(favorites.filter(id => id !== playerId));
@@ -65,12 +98,12 @@ function App() {
     }
   };
 
-  // --- LÓGICA DE BÚSQUEDA CON HISTORIAL ---
+
   const handleSearch = (value) => {
     setSearchTerm(value);
-    setCurrentPage(1); // Resetear a página 1 al buscar
+    setCurrentPage(1);
     if (value.trim() && !searchHistory.includes(value.trim())) {
-      setSearchHistory(prev => [value.trim(), ...prev].slice(0, 5)); // máximo 5 en historial
+      setSearchHistory(prev => [value.trim(), ...prev].slice(0, 5));
     }
   };
 
@@ -80,13 +113,6 @@ function App() {
   };
 
   const clearHistory = () => setSearchHistory([]);
-
-  // --- LÓGICA DE PAGINACIÓN ---
-  const totalPages = Math.max(1, Math.ceil(sortedPlayers.length / itemsPerPage));
-  const paginatedPlayers = sortedPlayers.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
 
   const goToPage = (page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
@@ -101,7 +127,6 @@ function App() {
     <div className={`dashboard ${isLightMode ? 'dashboard--light' : ''}`}>
       <div className="dashboard__content">
 
-        {/* --- SECCIÓN 1: HEADER --- */}
         <header className="dashboard__header">
           <div className="dashboard__header-top">
             <span className="badge">TOP CLUB / BASKETBALL</span>
@@ -119,7 +144,6 @@ function App() {
           </div>
         </header>
 
-        {/* --- SECCIÓN 2: MARCADOR (Score) --- */}
         <section className="score-board">
           <div className="score-board__team score-board__team--home">
             <h2 className="score-board__team-abbr">TCB</h2>
@@ -143,10 +167,9 @@ function App() {
           </div>
         </section>
 
-        {/* === PANEL PRINCIPAL (recuadro oscuro de fondo) === */}
         <div className="main-panel">
 
-          {/* --- SECCIÓN BUSCADOR --- */}
+
           <section className="search-section">
             <label className="search-label">BUSCAR JUGADORES</label>
             <div className="search-input-wrapper">
@@ -167,7 +190,7 @@ function App() {
             </div>
           </section>
 
-          {/* --- TARJETAS DE ESTADÍSTICAS --- */}
+
           <div className="stats-grid">
             <div className="stat-card stat-card--yellow">
               <h3>JUGADORES EN TABLA</h3>
@@ -205,7 +228,6 @@ function App() {
               )}
             </div>
 
-            {/* --- HISTORIAL DE BÚSQUEDA --- */}
             <div className="stat-card stat-card--history">
               <div className="history-header">
                 <h3>HISTORIAL DE BÚSQUEDA</h3>
@@ -227,7 +249,7 @@ function App() {
             </div>
           </div>
 
-          {/* --- BOTONES FILAS PARES / IMPARES --- */}
+
           <div className="row-filter-bar">
             <button
               className={`row-filter-btn ${rowHighlight === 'even' ? 'active' : ''}`}
@@ -298,7 +320,6 @@ function App() {
               </table>
             </div>
 
-            {/* --- PAGINACIÓN FUNCIONAL --- */}
             <div className="table-pagination">
               <div className="pagination-left">
                 <span>MOSTRAR</span>
@@ -329,22 +350,21 @@ function App() {
             </div>
           </section>
 
-        </div>{/* === FIN PANEL PRINCIPAL === */}
+        </div>
 
         {selectedPlayer && (
           <div className="modal-overlay" onClick={() => setSelectedPlayer(null)}>
             <div className="modal-content-wide" onClick={(e) => e.stopPropagation()}>
 
-              {/* --- Barra Superior (Gris) --- */}
+
               <div className="modal-top-bar">
                 <h2>{selectedPlayer.name}</h2>
                 <button className="modal-close-icon" onClick={() => setSelectedPlayer(null)}>✖</button>
               </div>
 
-              {/* --- Cuerpo Principal (Morado) --- */}
+
               <div className="modal-body-content">
 
-                {/* Placa y Botón Favorito */}
                 <div className="modal-badge-row">
                   <div className="badge-group">
                     <span className="badge badge--yellow">{selectedPlayer.pos.toUpperCase()}</span>
@@ -358,7 +378,6 @@ function App() {
                   </button>
                 </div>
 
-                {/* Cuadrícula de Información */}
                 <div className="modal-info-grid">
                   <div className="info-col">
                     <div className="info-item">
@@ -390,7 +409,6 @@ function App() {
                   </div>
                 </div>
 
-                {/* Tarjetas Grandes */}
                 <div className="modal-big-stats">
                   <div className="big-card bg-yellow">
                     <span className="big-label">PUNTOS</span>
@@ -406,7 +424,7 @@ function App() {
                   </div>
                 </div>
 
-                {/* Botón Cerrar Abajo */}
+
                 <div className="modal-footer">
                   <button className="modal-close-btn" onClick={() => setSelectedPlayer(null)}>
                     Cerrar
