@@ -193,7 +193,6 @@ Este patrón permite persistir los jugadores favoritos en localStorage y recuper
 Uso en el proyecto:
 
 - Explicación de React Hooks
-- Optimización de código
 - Estructuración de documentación
 
 ### 🤖 Gemini — Google
@@ -208,9 +207,6 @@ Uso en el proyecto:
 ### 🤖 CLAUDE — Anthropic
 
 Uso en el proyecto:
-
-- Ayuda en la implementación de nuevas funcionalidades
-- Ayuda en la corrección de errores
 - Ayuda en el Readme
 - ayuda con la implementacion del useEffect, useMemo
 
